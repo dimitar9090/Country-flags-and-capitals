@@ -14,9 +14,11 @@ struct FlagGuessingView: View {
     var body: some View {
         VStack {
             Text("Познай знамето")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
+                .font(.custom("Arial", size: 40))
+                .fontWeight(.semibold)
+                .foregroundColor(Color.blue)
+                .padding(.vertical, 10)
+            Spacer()
             
             Image(game.currentFlag)
                 .resizable()
@@ -25,6 +27,7 @@ struct FlagGuessingView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .shadow(radius: 10)
                 .padding()
+            Spacer()
             
             ForEach(game.options, id: \.self) { option in
                 Button(action: {
@@ -35,27 +38,37 @@ struct FlagGuessingView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
                         .foregroundColor(.white)
+                        .font(.title)
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
-                .padding(.vertical, 5)
+                .padding(.vertical, 10)
             }
             
-            if game.showingAlert {
-                Text(game.isCorrect ? "Correct answer!" : "Incorrect answer!")
-                    .padding()
-            }
+            Text("Правилни отговори: \(game.correctAnswerCount)")
+                .font(.title)
+                .bold()
+                .italic()
+                .padding()
+            
+            
+            Text("Най-висок резултат: \(UserDefaults.standard.integer(forKey: "highestScore"))")
+                .font(.title)
+                .bold()
+                .foregroundColor(.blue)
             
             Spacer()
         }
+        .background(Color.mint)
     }
 }
 
+
 class FlagGuessingGame: ObservableObject {
-    let countries = ["USA", "UK", "France", "Germany", "Italy"]
-    @Published var correctAnswerIndex = Int.random(in: 0..<3)
+    var countries = ["САЩ", "България", "Гърция", "Турция", "Румъния","Северна Македония", "Сърбия", "Албания", "Хърватия", "Унгария", "Черна Гора", "Австрия"]
+    @Published var correctAnswerIndex = Int.random(in: 0..<3) // Correct answer index is a random number between 0 and 2
     @Published var userGuess = ""
-    @Published var showingAlert = false
+    @Published var correctAnswerCount = 0
     
     var currentFlag: String {
         countries[correctAnswerIndex]
@@ -73,14 +86,22 @@ class FlagGuessingGame: ObservableObject {
         return options.shuffled()
     }
     
-    var isCorrect: Bool {
-        userGuess == currentFlag
-    }
-    
     func checkAnswer(option: String) {
-        userGuess = option
-        showingAlert = true
+        if option == currentFlag {
+            correctAnswerCount += 1
+            // Check if the current score is higher than the saved highest score
+            let highestScore = UserDefaults.standard.integer(forKey: "highestScore")
+            if correctAnswerCount > highestScore {
+                UserDefaults.standard.set(correctAnswerCount, forKey: "highestScore")
+            }
+        } else {
+            // Reset the counter to 0 if the answer is wrong
+            correctAnswerCount = 0
+        }
+        // Generate a new random index for the correct answer
+        correctAnswerIndex = Int.random(in: 0..<countries.count)
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
