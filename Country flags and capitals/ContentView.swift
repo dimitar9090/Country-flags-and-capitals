@@ -65,7 +65,7 @@ struct FlagGuessingView: View {
 
 
 class FlagGuessingGame: ObservableObject {
-    var countries = ["САЩ", "България", "Гърция", "Турция", "Румъния","Северна Македония", "Сърбия", "Албания", "Хърватия", "Унгария", "Черна Гора", "Австрия"]
+    var countries = ["САЩ", "България", "Гърция", "Турция", "Румъния","Северна Македония", "Сърбия", "Албания", "Хърватия", "Унгария", "Черна Гора", "Австрия", "Словения", "Словакия", "Оландски острови", "Андора", "Беларус", "Белгия", "Босна и Херцеговина", "Кипър", "Чехия", "Дания", "Естония", "Фарьорски острови", "Финландия", "Франция", "Германия", "Гибралтар", "Гернси"]
     @Published var correctAnswerIndex = Int.random(in: 0..<3) // Correct answer index is a random number between 0 and 2
     @Published var userGuess = ""
     @Published var correctAnswerCount = 0
