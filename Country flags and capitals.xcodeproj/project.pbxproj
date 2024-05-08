@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D146696C2BEA479A005A504E /* CountriesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D146696B2BEA479A005A504E /* CountriesData.swift */; };
+		D146696E2BEA48D6005A504E /* correct1.wav in Resources */ = {isa = PBXBuildFile; fileRef = D146696D2BEA48D6005A504E /* correct1.wav */; };
+		D14669702BEA4AFC005A504E /* wrong.wav in Resources */ = {isa = PBXBuildFile; fileRef = D146696F2BEA4AFC005A504E /* wrong.wav */; };
+		D14669762BEAD0A6005A504E /* OpeningPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14669752BEAD0A6005A504E /* OpeningPageView.swift */; };
+		D14669782BEAD166005A504E /* CapitalGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14669772BEAD166005A504E /* CapitalGameView.swift */; };
 		D197BC342BE513C700D9E517 /* Country_flags_and_capitalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197BC332BE513C700D9E517 /* Country_flags_and_capitalsApp.swift */; };
 		D197BC362BE513C700D9E517 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197BC352BE513C700D9E517 /* ContentView.swift */; };
 		D197BC382BE513C800D9E517 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D197BC372BE513C800D9E517 /* Assets.xcassets */; };
@@ -14,6 +19,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D146696B2BEA479A005A504E /* CountriesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesData.swift; sourceTree = "<group>"; };
+		D146696D2BEA48D6005A504E /* correct1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = correct1.wav; sourceTree = "<group>"; };
+		D146696F2BEA4AFC005A504E /* wrong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wrong.wav; sourceTree = "<group>"; };
+		D14669752BEAD0A6005A504E /* OpeningPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningPageView.swift; sourceTree = "<group>"; };
+		D14669772BEAD166005A504E /* CapitalGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapitalGameView.swift; sourceTree = "<group>"; };
 		D197BC302BE513C700D9E517 /* Country flags and capitals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Country flags and capitals.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D197BC332BE513C700D9E517 /* Country_flags_and_capitalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country_flags_and_capitalsApp.swift; sourceTree = "<group>"; };
 		D197BC352BE513C700D9E517 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -32,6 +42,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D14F31962BE99A5E00AB307F /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				D146696F2BEA4AFC005A504E /* wrong.wav */,
+				D146696D2BEA48D6005A504E /* correct1.wav */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		D197BC272BE513C700D9E517 = {
 			isa = PBXGroup;
 			children = (
@@ -53,7 +72,11 @@
 			children = (
 				D197BC332BE513C700D9E517 /* Country_flags_and_capitalsApp.swift */,
 				D197BC352BE513C700D9E517 /* ContentView.swift */,
+				D146696B2BEA479A005A504E /* CountriesData.swift */,
+				D14669752BEAD0A6005A504E /* OpeningPageView.swift */,
+				D14669772BEAD166005A504E /* CapitalGameView.swift */,
 				D197BC372BE513C800D9E517 /* Assets.xcassets */,
+				D14F31962BE99A5E00AB307F /* Sounds */,
 				D197BC392BE513C800D9E517 /* Preview Content */,
 			);
 			path = "Country flags and capitals";
@@ -127,6 +150,8 @@
 			files = (
 				D197BC3B2BE513C800D9E517 /* Preview Assets.xcassets in Resources */,
 				D197BC382BE513C800D9E517 /* Assets.xcassets in Resources */,
+				D14669702BEA4AFC005A504E /* wrong.wav in Resources */,
+				D146696E2BEA48D6005A504E /* correct1.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +162,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D14669762BEAD0A6005A504E /* OpeningPageView.swift in Sources */,
 				D197BC362BE513C700D9E517 /* ContentView.swift in Sources */,
+				D146696C2BEA479A005A504E /* CountriesData.swift in Sources */,
+				D14669782BEAD166005A504E /* CapitalGameView.swift in Sources */,
 				D197BC342BE513C700D9E517 /* Country_flags_and_capitalsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

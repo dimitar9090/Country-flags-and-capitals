@@ -1,4 +1,6 @@
 import SwiftUI
+import AVFoundation
+import Foundation
 
 struct ContentView: View {
     @StateObject var game = FlagGuessingGame()
@@ -51,7 +53,6 @@ struct FlagGuessingView: View {
                 .italic()
                 .padding()
             
-            
             Text("Най-висок резултат: \(UserDefaults.standard.integer(forKey: "highestScore"))")
                 .font(.title)
                 .bold()
@@ -65,7 +66,8 @@ struct FlagGuessingView: View {
 
 
 class FlagGuessingGame: ObservableObject {
-    var countries = ["САЩ", "България", "Гърция", "Турция", "Румъния","Северна Македония", "Сърбия", "Албания", "Хърватия", "Унгария", "Черна Гора", "Австрия", "Словения", "Словакия", "Оландски острови", "Андора", "Беларус", "Белгия", "Босна и Херцеговина", "Кипър", "Чехия", "Дания", "Естония", "Фарьорски острови", "Финландия", "Франция", "Германия", "Гибралтар", "Гернси"]
+
+    
     @Published var correctAnswerIndex = Int.random(in: 0..<3) // Correct answer index is a random number between 0 and 2
     @Published var userGuess = ""
     @Published var correctAnswerCount = 0
@@ -86,22 +88,48 @@ class FlagGuessingGame: ObservableObject {
         return options.shuffled()
     }
     
+    var correctAnswerSoundEffect: AVAudioPlayer?
+    var wrongAnswerSoundEffect: AVAudioPlayer?
+
+    init() {
+        // Load the sound file for correct answer
+        if let correctSoundURL = Bundle.main.url(forResource: "correct1", withExtension: "wav") {
+            do {
+                correctAnswerSoundEffect = try AVAudioPlayer(contentsOf: correctSoundURL)
+            } catch {
+                print("Error loading correct answer sound file: \(error.localizedDescription)")
+            }
+        }
+        
+        // Load the sound file for wrong answer
+        if let wrongSoundURL = Bundle.main.url(forResource: "wrong", withExtension: "wav") {
+            do {
+                wrongAnswerSoundEffect = try AVAudioPlayer(contentsOf: wrongSoundURL)
+            } catch {
+                print("Error loading wrong answer sound file: \(error.localizedDescription)")
+            }
+        }
+    }
+
     func checkAnswer(option: String) {
         if option == currentFlag {
             correctAnswerCount += 1
+            // Play correct answer sound effect
+            correctAnswerSoundEffect?.play()
             // Check if the current score is higher than the saved highest score
             let highestScore = UserDefaults.standard.integer(forKey: "highestScore")
             if correctAnswerCount > highestScore {
                 UserDefaults.standard.set(correctAnswerCount, forKey: "highestScore")
             }
         } else {
+            // Play wrong answer sound effect
+            wrongAnswerSoundEffect?.play()
             // Reset the counter to 0 if the answer is wrong
             correctAnswerCount = 0
         }
         // Generate a new random index for the correct answer
         correctAnswerIndex = Int.random(in: 0..<countries.count)
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {
