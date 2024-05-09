@@ -11,7 +11,7 @@ import SwiftUI
 struct Country_flags_and_capitalsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            OpeningPageView()
         }
     }
 }

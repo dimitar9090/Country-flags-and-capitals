@@ -6,6 +6,10 @@ import SwiftUI
 import AVFoundation
 import Foundation
 
+import SwiftUI
+import AVFoundation
+import Foundation
+
 struct CapitalGameView: View {
     @StateObject var game = CapitalGuessingGame()
     
@@ -18,8 +22,16 @@ struct CapitalGameView: View {
                     .font(.title)
                     .padding()
                 
-                Text("Country: \(game.currentCountry)")
-                    .padding()
+                if !game.currentCountry.isEmpty { // Check if currentCountry is not empty
+                    Image(game.currentCountry) // Assuming flag images are named after country names
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 60) // Adjust size as needed
+                        .clipShape(Circle()) // Optional: Clip to circle for rounded effect
+                    
+                    Text("Country: \(game.currentCountry)")
+                        .padding()
+                }
                 
                 ForEach(game.options, id: \.self) { option in
                     Button(action: {
@@ -53,6 +65,8 @@ struct CapitalGameView: View {
 }
 
 
+
+
 class CapitalGuessingGame: ObservableObject {
     let countriesAndCapitals: [String: String] = [
         "USA": "Washington D.C.",
@@ -64,7 +78,7 @@ class CapitalGuessingGame: ObservableObject {
         "Serbia": "Belgrade",
         "Albania": "Tirana",
         "Croatia": "Zagreb",
-        "Hungary": "Budapest"
+        "Унгария": "Будапещ"
         // Add more countries and capitals as needed
     ]
     
@@ -79,7 +93,7 @@ class CapitalGuessingGame: ObservableObject {
 
     init() {
         // Load the sound file for correct answer
-        if let correctSoundURL = Bundle.main.url(forResource: "correct", withExtension: "wav") {
+        if let correctSoundURL = Bundle.main.url(forResource: "correct1", withExtension: "wav") {
             do {
                 correctAnswerSoundEffect = try AVAudioPlayer(contentsOf: correctSoundURL)
             } catch {
