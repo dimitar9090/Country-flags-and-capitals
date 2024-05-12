@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D13767D42BED59D9001F5227 /* CapitalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D13767D32BED59D9001F5227 /* CapitalData.swift */; };
 		D146696C2BEA479A005A504E /* CountriesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D146696B2BEA479A005A504E /* CountriesData.swift */; };
 		D146696E2BEA48D6005A504E /* correct1.wav in Resources */ = {isa = PBXBuildFile; fileRef = D146696D2BEA48D6005A504E /* correct1.wav */; };
 		D14669702BEA4AFC005A504E /* wrong.wav in Resources */ = {isa = PBXBuildFile; fileRef = D146696F2BEA4AFC005A504E /* wrong.wav */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D13767D32BED59D9001F5227 /* CapitalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapitalData.swift; sourceTree = "<group>"; };
 		D146696B2BEA479A005A504E /* CountriesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesData.swift; sourceTree = "<group>"; };
 		D146696D2BEA48D6005A504E /* correct1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = correct1.wav; sourceTree = "<group>"; };
 		D146696F2BEA4AFC005A504E /* wrong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wrong.wav; sourceTree = "<group>"; };
@@ -71,8 +73,9 @@
 			isa = PBXGroup;
 			children = (
 				D197BC332BE513C700D9E517 /* Country_flags_and_capitalsApp.swift */,
-				D197BC352BE513C700D9E517 /* ContentView.swift */,
+				D13767D32BED59D9001F5227 /* CapitalData.swift */,
 				D146696B2BEA479A005A504E /* CountriesData.swift */,
+				D197BC352BE513C700D9E517 /* ContentView.swift */,
 				D14669752BEAD0A6005A504E /* OpeningPageView.swift */,
 				D14669772BEAD166005A504E /* CapitalGameView.swift */,
 				D197BC372BE513C800D9E517 /* Assets.xcassets */,
@@ -164,6 +167,7 @@
 			files = (
 				D14669762BEAD0A6005A504E /* OpeningPageView.swift in Sources */,
 				D197BC362BE513C700D9E517 /* ContentView.swift in Sources */,
+				D13767D42BED59D9001F5227 /* CapitalData.swift in Sources */,
 				D146696C2BEA479A005A504E /* CountriesData.swift in Sources */,
 				D14669782BEAD166005A504E /* CapitalGameView.swift in Sources */,
 				D197BC342BE513C700D9E517 /* Country_flags_and_capitalsApp.swift in Sources */,

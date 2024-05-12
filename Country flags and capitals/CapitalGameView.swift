@@ -1,4 +1,3 @@
-
 import SwiftUI
 import AVFoundation
 import Foundation
@@ -8,21 +7,22 @@ struct CapitalGameView: View {
     
     var body: some View {
         ZStack {
-            Color.mint.edgesIgnoringSafeArea(.all) // Background color covering the entire screen
+            Color.mint.edgesIgnoringSafeArea(.all)
             
             VStack {
                 Text("Познай столицата")
                     .font(.title)
                     .padding()
                 
-                if !game.currentCountry.isEmpty { // Check if currentCountry is not empty
-                    Image(game.currentCountry) // Assuming flag images are named after country names
+                if !game.currentCountry.isEmpty {
+                    Image(game.currentCountry)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 60) // Adjust size as needed
-                        .clipShape(Circle()) // Optional: Clip to circle for rounded effect
+                        .frame(width: 200, height: 120)
+                        .clipShape(Circle())
                     
-                    Text("Country: \(game.currentCountry)")
+                    Text(" \(game.currentCountry)")
+                        .font(.title)
                         .padding()
                 }
                 
@@ -37,6 +37,7 @@ struct CapitalGameView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                             .padding(.horizontal)
+                            .font(.title)
                     }
                     .padding(.vertical, 10)
                 }
@@ -54,38 +55,23 @@ struct CapitalGameView: View {
                     .padding()
             }
         }
+        .onDisappear {
+            game.saveHighestScore()
+        }
     }
 }
 
-
-
-
 class CapitalGuessingGame: ObservableObject {
-    let countriesAndCapitals: [String: String] = [
-        "USA": "Washington D.C.",
-        "Bulgaria": "Sofia",
-        "Greece": "Athens",
-        "Turkey": "Ankara",
-        "Romania": "Bucharest",
-        "North Macedonia": "Skopje",
-        "Serbia": "Belgrade",
-        "Albania": "Tirana",
-        "Croatia": "Zagreb",
-        "Унгария": "Будапещ"
-        // Add more countries and capitals as needed
-    ]
-    
     @Published var currentCountry = ""
     @Published var correctCapital = ""
     @Published var options: [String] = []
     @Published var correctAnswerCount = 0
-    @Published var highestScore = 0
+    @Published var highestScore = UserDefaults.standard.integer(forKey: "capitalHighestScore")
     
     var correctAnswerSoundEffect: AVAudioPlayer?
     var wrongAnswerSoundEffect: AVAudioPlayer?
 
     init() {
-        // Load the sound file for correct answer
         if let correctSoundURL = Bundle.main.url(forResource: "correct1", withExtension: "wav") {
             do {
                 correctAnswerSoundEffect = try AVAudioPlayer(contentsOf: correctSoundURL)
@@ -94,7 +80,6 @@ class CapitalGuessingGame: ObservableObject {
             }
         }
         
-        // Load the sound file for wrong answer
         if let wrongSoundURL = Bundle.main.url(forResource: "wrong", withExtension: "wav") {
             do {
                 wrongAnswerSoundEffect = try AVAudioPlayer(contentsOf: wrongSoundURL)
@@ -135,6 +120,7 @@ class CapitalGuessingGame: ObservableObject {
             correctAnswerCount += 1
             if correctAnswerCount > highestScore {
                 highestScore = correctAnswerCount
+                UserDefaults.standard.set(highestScore, forKey: "capitalHighestScore")
             }
             correctAnswerSoundEffect?.play()
         } else {
@@ -142,6 +128,10 @@ class CapitalGuessingGame: ObservableObject {
             correctAnswerCount = 0
         }
         generateQuestion()
+    }
+    
+    func saveHighestScore() {
+        UserDefaults.standard.set(highestScore, forKey: "capitalHighestScore")
     }
 }
 

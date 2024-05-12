@@ -4,7 +4,6 @@
 //
 //  Created by Dimitar Angelov on 8.05.24.
 //
-
 import SwiftUI
 
 struct OpeningPageView: View {
@@ -14,12 +13,19 @@ struct OpeningPageView: View {
                 VStack(spacing: 20) {
                     Spacer()
                     Text("Изберете игра")
-                        .font(.largeTitle)
-                        .foregroundColor(.primary)
-                        .padding(.top, geometry.safeAreaInsets.top) // Use geometry reader to access safeAreaInsets
+                        .font(.system(size: 40))
+                        .foregroundColor(.accentColor)
+                        .padding( geometry.safeAreaInsets.top) // Use geometry reader to access safeAreaInsets
                         .frame(maxWidth: .infinity)
-                        .background(Color(UIColor.systemBackground).edgesIgnoringSafeArea(.top))
-                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 2)
+                        .background(Color.orange.edgesIgnoringSafeArea(.top))
+                        .shadow(color: Color.black.opacity(0.5), radius: 10, x: 0, y: 2)
+                    
+                    Image("worldmap")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.6)
+                            .cornerRadius(200)
+                    
                     Spacer()
                     
                     NavigationLink(destination: ContentView()) {
@@ -42,11 +48,11 @@ struct OpeningPageView: View {
                 }
                 .navigationBarHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
+                .background(Color.yellow) // Change the background color here
             }
         }
     }
 }
-
 #Preview {
     OpeningPageView()
 }

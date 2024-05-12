@@ -31,7 +31,7 @@ struct FlagGuessingView: View {
                 .padding()
             Spacer()
             
-            ForEach(game.options, id: \.self) { option in
+            ForEach(game.options.prefix(game.numberOfOptions), id: \.self) { option in
                 Button(action: {
                     game.checkAnswer(option: option)
                 }) {
@@ -60,25 +60,28 @@ struct FlagGuessingView: View {
             
             Spacer()
         }
-        .background(Color.mint)
+        .background(Color.green) // Changed background color for better visibility
     }
 }
 
 
 class FlagGuessingGame: ObservableObject {
-
-    
-    @Published var correctAnswerIndex = Int.random(in: 0..<3) // Correct answer index is a random number between 0 and 2
+    @Published var correctAnswerIndex = Int.random(in: 0..<3)
     @Published var userGuess = ""
     @Published var correctAnswerCount = 0
+    @Published var currentLevel = 1
     
     var currentFlag: String {
         countries[correctAnswerIndex]
     }
     
+    var numberOfOptions: Int {
+        return min(2 + currentLevel, countries.count)
+    }
+    
     var options: [String] {
         var options = [currentFlag]
-        while options.count < 3 {
+        while options.count < numberOfOptions {
             let randomIndex = Int.random(in: 0..<countries.count)
             let country = countries[randomIndex]
             if !options.contains(country) {
@@ -92,7 +95,6 @@ class FlagGuessingGame: ObservableObject {
     var wrongAnswerSoundEffect: AVAudioPlayer?
 
     init() {
-        // Load the sound file for correct answer
         if let correctSoundURL = Bundle.main.url(forResource: "correct1", withExtension: "wav") {
             do {
                 correctAnswerSoundEffect = try AVAudioPlayer(contentsOf: correctSoundURL)
@@ -101,7 +103,6 @@ class FlagGuessingGame: ObservableObject {
             }
         }
         
-        // Load the sound file for wrong answer
         if let wrongSoundURL = Bundle.main.url(forResource: "wrong", withExtension: "wav") {
             do {
                 wrongAnswerSoundEffect = try AVAudioPlayer(contentsOf: wrongSoundURL)
@@ -114,22 +115,31 @@ class FlagGuessingGame: ObservableObject {
     func checkAnswer(option: String) {
         if option == currentFlag {
             correctAnswerCount += 1
-            // Play correct answer sound effect
+            print("Correct Answer Count:", correctAnswerCount)
             correctAnswerSoundEffect?.play()
-            // Check if the current score is higher than the saved highest score
             let highestScore = UserDefaults.standard.integer(forKey: "highestScore")
             if correctAnswerCount > highestScore {
                 UserDefaults.standard.set(correctAnswerCount, forKey: "highestScore")
             }
+            
+            if correctAnswerCount % 5 == 0 && numberOfOptions < 5 {
+                currentLevel += 1
+                print("Current Level:", currentLevel)
+            }
         } else {
-            // Play wrong answer sound effect
             wrongAnswerSoundEffect?.play()
-            // Reset the counter to 0 if the answer is wrong
             correctAnswerCount = 0
+            resetOptions() // Call resetOptions when the answer is incorrect
         }
-        // Generate a new random index for the correct answer
         correctAnswerIndex = Int.random(in: 0..<countries.count)
     }
+
+    func resetOptions() {
+        // Reset options to three
+        currentLevel = 1
+        objectWillChange.send()
+    }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
