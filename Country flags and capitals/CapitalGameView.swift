@@ -9,50 +9,54 @@ struct CapitalGameView: View {
         ZStack {
             Color.mint.edgesIgnoringSafeArea(.all)
             
-            VStack {
-                Text("Познай столицата")
-                    .font(.title)
-                    .padding()
-                
-                if !game.currentCountry.isEmpty {
-                    Image(game.currentCountry)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 120)
-                        .clipShape(Circle())
-                    
-                    Text(" \(game.currentCountry)")
-                        .font(.title)
+            ScrollView { // Encapsulate the main content in a ScrollView
+                VStack {
+                    Text("Познай Столицата")
+                        .font(.custom("Troika", size: 42))
                         .padding()
-                }
-                
-                ForEach(game.options, id: \.self) { option in
-                    Button(action: {
-                        game.checkAnswer(option: option)
-                    }) {
-                        Text(option)
+                    
+                    
+                    if !game.currentCountry.isEmpty {
+                        Image(game.currentCountry)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 200, height: 120)
+                            .clipShape(Circle())
+                        
+                        Text(" \(game.currentCountry)")
+                            .font(.custom("Troika", size: 35))
                             .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
-                            .font(.title)
                     }
-                    .padding(.vertical, 10)
+                    
+                    ForEach(game.options, id: \.self) { option in
+                        Button(action: {
+                            game.checkAnswer(option: option)
+                        }) {
+                            Text(option)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                                .font(.title)
+                        }
+                        .padding(.vertical, 2)
+                    }
+                    
+                    Text("Правилни отговори: \(game.correctAnswerCount)")
+                       
+                        .bold()
+                        .font(.custom("Azbuki", size: 35))
+                        .padding()
+                    
+                    Text("Най-висок Резолтат: \(game.highestScore)")
+                        .font(.custom("Azbuki", size: 35))
+                        .bold()
+                        .italic()
+                        .padding()
+                    Spacer()
                 }
-                
-                Text("Правилни отговори: \(game.correctAnswerCount)")
-                    .font(.title)
-                    .bold()
-                    .italic()
-                    .padding()
-                
-                Text("Най-висок резултат: \(game.highestScore)")
-                    .font(.title)
-                    .bold()
-                    .italic()
-                    .padding()
             }
         }
         .onDisappear {
@@ -66,6 +70,7 @@ class CapitalGuessingGame: ObservableObject {
     @Published var correctCapital = ""
     @Published var options: [String] = []
     @Published var correctAnswerCount = 0
+    @Published var currentLevel = 1
     @Published var highestScore = UserDefaults.standard.integer(forKey: "capitalHighestScore")
     
     var correctAnswerSoundEffect: AVAudioPlayer?
@@ -87,7 +92,7 @@ class CapitalGuessingGame: ObservableObject {
                 print("Error loading wrong answer sound file: \(error.localizedDescription)")
             }
         }
-        
+
         generateQuestion()
     }
     
@@ -103,7 +108,9 @@ class CapitalGuessingGame: ObservableObject {
     func generateOptions(correctCapital: String) -> [String] {
         var options: [String] = [correctCapital]
         
-        while options.count < 3 {
+        let numberOfOptions = min(2 + currentLevel, 5) // Maximum of 5 options
+        
+        while options.count < numberOfOptions {
             let randomIndex = Int.random(in: 0..<countriesAndCapitals.count)
             let capital = Array(countriesAndCapitals.values)[randomIndex]
             
@@ -123,9 +130,16 @@ class CapitalGuessingGame: ObservableObject {
                 UserDefaults.standard.set(highestScore, forKey: "capitalHighestScore")
             }
             correctAnswerSoundEffect?.play()
+            
+            if correctAnswerCount % 5 == 0 { // Increase level every 5 correct answers
+                currentLevel += 1
+            }
         } else {
             wrongAnswerSoundEffect?.play()
             correctAnswerCount = 0
+            
+            // Reset options to three
+            currentLevel = 1
         }
         generateQuestion()
     }

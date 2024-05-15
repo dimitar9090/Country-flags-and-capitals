@@ -13,7 +13,7 @@ struct OpeningPageView: View {
                 VStack(spacing: 20) {
                     Spacer()
                     Text("Изберете игра")
-                        .font(.system(size: 40))
+                        .font(.custom("Troika", size: 42))
                         .foregroundColor(.accentColor)
                         .padding( geometry.safeAreaInsets.top) // Use geometry reader to access safeAreaInsets
                         .frame(maxWidth: .infinity)
@@ -31,7 +31,7 @@ struct OpeningPageView: View {
                     NavigationLink(destination: ContentView()) {
                         Text("Знамена")
                             .padding(EdgeInsets(top: 50, leading: 100, bottom: 30, trailing: 100))
-                            .font(.title)
+                            .font(.custom("Azbuki", size: 35))
                             .foregroundColor(.white)
                             .background(Color.blue)
                             .cornerRadius(10)
@@ -40,7 +40,7 @@ struct OpeningPageView: View {
                     NavigationLink(destination: CapitalGameView()) {
                         Text("Столици")
                             .padding(EdgeInsets(top: 50, leading: 100, bottom: 30, trailing: 100))
-                            .font(.title)
+                            .font(.custom("Azbuki", size: 35))
                             .foregroundColor(.white)
                             .background(Color.blue)
                             .cornerRadius(10)
