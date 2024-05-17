@@ -60,18 +60,33 @@ struct FlagGuessingView: View {
             
             Spacer()
             
-            Button(action: {
-                showHint = true
-            }) {
-                Text("Жокер")
-                    .padding()
-                    .frame(width: 200, height: 50)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .font(.title)
-                    .cornerRadius(10)
+            HStack {
+                Button(action: {
+                    showHint = true
+                }) {
+                    Image(systemName: "star.circle.fill")
+                        .padding()
+                        .frame(width: 50, height: 50)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .font(.title)
+                        .cornerRadius(10)
+                }
+                .padding(.vertical, 10)
+
+                Button(action: {
+                    game.activateTwoOptions()
+                }) {
+                    Image(systemName: "scissors")
+                        .padding()
+                        .frame(width: 50, height: 50)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .font(.title)
+                        .cornerRadius(10)
+                }
+                .padding(.vertical, 10)
             }
-            .padding(.vertical, 10)
             
             Spacer()
             
@@ -101,12 +116,9 @@ struct FlagGuessingView: View {
                 
             Text("Най-висок резултат: \(UserDefaults.standard.integer(forKey: "highestScore"))")
                 .font(.custom("Azbuki", size: 35))
-               
-
                 .bold()
                 .padding()
                 
-
             Spacer()
         }
         .background(Color.mint)
@@ -119,6 +131,7 @@ class FlagGuessingGame: ObservableObject {
     @Published var correctAnswerCount = 0
     @Published var currentLevel = 1
     @Published var timeRemaining = 10
+    @Published var reduceToTwoOptions = false // New property
     var timer: Timer?
     private var optionsLocked = false
     @Published var flagRotationAngle: Double = 0.0
@@ -128,7 +141,11 @@ class FlagGuessingGame: ObservableObject {
     }
     
     var numberOfOptions: Int {
-        return min(2 + currentLevel, countries.count)
+        if reduceToTwoOptions {
+            return 2
+        } else {
+            return min(2 + currentLevel, countries.count)
+        }
     }
     
     var options: [String] {
@@ -198,6 +215,7 @@ class FlagGuessingGame: ObservableObject {
         correctAnswerIndex = Int.random(in: 0..<countries.count)
         _options = generateOptions()
         optionsLocked = false
+        reduceToTwoOptions = false // Reset reduceToTwoOptions to false
         
         withAnimation {
             flagRotationAngle += 360.0 // Rotate flag image when changing
@@ -206,10 +224,11 @@ class FlagGuessingGame: ObservableObject {
     }
 
     func resetOptions() {
-        // Reset options to three
+        // Reset options to initial state
         currentLevel = 1
         _options = generateOptions()
         optionsLocked = false
+        reduceToTwoOptions = false // Reset reduceToTwoOptions to false
         objectWillChange.send()
     }
 
@@ -230,6 +249,11 @@ class FlagGuessingGame: ObservableObject {
     func resetTimer() {
         timer?.invalidate()
         startTimer()
+    }
+
+    func activateTwoOptions() {
+        reduceToTwoOptions = true
+        _options = generateOptions()
     }
 }
 
