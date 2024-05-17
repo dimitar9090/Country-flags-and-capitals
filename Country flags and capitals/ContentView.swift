@@ -27,19 +27,54 @@ struct FlagGuessingView: View {
             
             Spacer()
             
-            HStack {
-                Image(game.currentFlag)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 100)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .shadow(radius: 10)
-                    .padding()
-                    .rotation3DEffect(
-                        .degrees(game.flagRotationAngle),
-                        axis: (x: 0.0, y: 1.0, z: 0.0)
-                    )
+            Image(game.currentFlag)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .shadow(radius: 10)
+                .padding()
+                .rotation3DEffect(
+                    .degrees(game.flagRotationAngle),
+                    axis: (x: 0.0, y: 1.0, z: 0.0)
+                )
+            
+            Spacer()
+            
+            HStack {Spacer()
+                if game.showHintJoker {
+                    Button(action: {
+                        showHint = true
+                        game.useHintJoker()
+                    }) 
+                    {
+                        Image(systemName: "star.circle.fill")
+                            .padding()
+                            .frame(width: 50, height: 50)
+                            .background(Color.orange)
+                            .foregroundColor(.white)
+                            .font(.title)
+                            .cornerRadius(10)
+                    }
+                    .padding(.vertical, 10)
+                }
 
+                if game.showTwoOptionsJoker {
+                    Button(action: {
+                        game.activateTwoOptions()
+                        game.useTwoOptionsJoker()
+                    }) {
+                        Image(systemName: "scissors")
+                            .padding()
+                            .frame(width: 50, height: 50)
+                            .background(Color.orange)
+                            .foregroundColor(.white)
+                            .font(.title)
+                            .cornerRadius(10)
+                    }
+                    .padding(.vertical, 10)
+                }
+                
                 Spacer()
                 
                 ZStack {
@@ -56,36 +91,6 @@ struct FlagGuessingView: View {
                         .foregroundColor(.red)
                 }
                 .padding()
-            }
-            
-            Spacer()
-            
-            HStack {
-                Button(action: {
-                    showHint = true
-                }) {
-                    Image(systemName: "star.circle.fill")
-                        .padding()
-                        .frame(width: 50, height: 50)
-                        .background(Color.orange)
-                        .foregroundColor(.white)
-                        .font(.title)
-                        .cornerRadius(10)
-                }
-                .padding(.vertical, 10)
-
-                Button(action: {
-                    game.activateTwoOptions()
-                }) {
-                    Image(systemName: "scissors")
-                        .padding()
-                        .frame(width: 50, height: 50)
-                        .background(Color.orange)
-                        .foregroundColor(.white)
-                        .font(.title)
-                        .cornerRadius(10)
-                }
-                .padding(.vertical, 10)
             }
             
             Spacer()
@@ -132,6 +137,8 @@ class FlagGuessingGame: ObservableObject {
     @Published var currentLevel = 1
     @Published var timeRemaining = 10
     @Published var reduceToTwoOptions = false // New property
+    @Published var showHintJoker = true // Show hint joker button
+    @Published var showTwoOptionsJoker = true // Show two options joker button
     var timer: Timer?
     private var optionsLocked = false
     @Published var flagRotationAngle: Double = 0.0
@@ -203,9 +210,15 @@ class FlagGuessingGame: ObservableObject {
                 UserDefaults.standard.set(correctAnswerCount, forKey: "highestScore")
             }
             
-            if correctAnswerCount % 5 == 0 && numberOfOptions < 5 {
-                currentLevel += 1
-                print("Current Level:", currentLevel)
+            if correctAnswerCount % 5 == 0 {
+                if !showHintJoker {
+                    showHintJoker = true
+                } else if !showTwoOptionsJoker {
+                    showTwoOptionsJoker = true
+                } else {
+                    currentLevel += 1
+                    print("Current Level:", currentLevel)
+                }
             }
         } else {
             wrongAnswerSoundEffect?.play()
@@ -254,6 +267,14 @@ class FlagGuessingGame: ObservableObject {
     func activateTwoOptions() {
         reduceToTwoOptions = true
         _options = generateOptions()
+    }
+    
+    func useHintJoker() {
+        showHintJoker = false
+    }
+    
+    func useTwoOptionsJoker() {
+        showTwoOptionsJoker = false
     }
 }
 
