@@ -16,6 +16,7 @@ struct ContentView: View {
 struct FlagGuessingView: View {
     @ObservedObject var game: FlagGuessingGame
     @State private var selectedOption: String? // Track the selected option
+    @State private var showHint = false // Track whether to show the hint
 
     var body: some View {
         VStack {
@@ -39,7 +40,6 @@ struct FlagGuessingView: View {
                         axis: (x: 0.0, y: 1.0, z: 0.0)
                     )
 
-                    
                 Spacer()
                 
                 ZStack {
@@ -56,8 +56,22 @@ struct FlagGuessingView: View {
                         .foregroundColor(.red)
                 }
                 .padding()
-                
             }
+            
+            Spacer()
+            
+            Button(action: {
+                showHint = true
+            }) {
+                Text("Жокер")
+                    .padding()
+                    .frame(width: 200, height: 50)
+                    .background(Color.orange)
+                    .foregroundColor(.white)
+                    .font(.title)
+                    .cornerRadius(10)
+            }
+            .padding(.vertical, 10)
             
             Spacer()
             
@@ -66,18 +80,18 @@ struct FlagGuessingView: View {
                     selectedOption = option
                     game.checkAnswer(option: option)
                     game.resetTimer()
+                    showHint = false // Reset hint display when an option is selected
                 }) {
                     Text(option)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(selectedOption == option ? (option == game.currentFlag ? Color.green : Color.red) : Color.blue)
+                        .background(showHint && option == game.currentFlag ? Color.green : Color.blue) // Highlight correct answer if hint is shown
                         .foregroundColor(.white)
                         .font(.title)
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
                 .padding(.vertical, 5)
-               
             }
             
             Text("Правилни отговори: \(game.correctAnswerCount)")
@@ -85,9 +99,10 @@ struct FlagGuessingView: View {
                 .bold()
                 .padding()
                 
-            
             Text("Най-висок резултат: \(UserDefaults.standard.integer(forKey: "highestScore"))")
                 .font(.custom("Azbuki", size: 35))
+               
+
                 .bold()
                 .padding()
                 
