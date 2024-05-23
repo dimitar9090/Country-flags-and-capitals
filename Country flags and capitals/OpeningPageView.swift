@@ -3,7 +3,7 @@
 //  Country flags and capitals
 //
 //  Created by Dimitar Angelov on 8.05.24.
-//
+//fu
 import SwiftUI
 
 struct OpeningPageView: View {
